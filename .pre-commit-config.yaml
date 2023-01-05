@@ -1,8 +1,8 @@
 repos:
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.2.0
-    hooks:
-      - id: seed-isort-config
+  # - repo: https://github.com/asottile/seed-isort-config
+  #   rev: v2.2.0
+  #   hooks:
+  #     - id: seed-isort-config
 
   - repo: https://github.com/ambv/black
     rev: 22.12.0
@@ -16,12 +16,30 @@ repos:
       - id: isort
         args: ["--profile", "black"]
 
-  - repo: local
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
     hooks:
-      - id: flake8
-        name: flake8
-        description: wemake-python-styleguide enforcement
-        entry: flake8
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      # - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+
+        # - id: flake8
+        #   name: flake8
+        #   description: wemake-python-styleguide enforcement
+        #   entry: flake8
         args: ["--config=setup.cfg"]
         language: python
         types: [python]
