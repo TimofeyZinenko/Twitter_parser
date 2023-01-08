@@ -1,5 +1,10 @@
-from fastapi import APIRouter, Body
-from pydantic import BaseModel
+from http import HTTPStatus
+from typing import List
+
+from fastapi import APIRouter, Body, Depends, HTTPException
+from models.common import get_whole_list
+from pydantic import BaseModel, dataclasses
+from services.sessons_serviсe import AccountsParserService, get_sesson_service
 
 
 class Sesson(BaseModel):
@@ -9,28 +14,34 @@ class Sesson(BaseModel):
 router = APIRouter()
 
 
-@router.put("/", response_model=Sesson)
+@router.post("/", response_model=Sesson)
 async def accounts_parser(
-    links: list[str] = Body(
+    links: List[str] = Body(
         examples={
             "single link list": {
                 "summsry": "With single link",
                 "description": "A **single link** list works correctly.",
-                "value": ["link_1"],
+                "value": ["https://twitter.com/MessariCrypto"],
             },
             "links link": {
                 "summsry": "links list",
                 "description": "A **links** list works correctly.",
                 "value": [
-                    "link_1",
-                    "link_2",
-                    "link_3",
-                    "link_4",
-                    "link_5",
+                    "https://twitter.com/tyler",
+                    "https://twitter.com/novogratz",
+                    "https://twitter.com/MessariCrypto",
+                    "https://twitter.com/CryptoHayes",
+                    "https://twitter.com/CqweGR",
                 ],
+            },
+            "all 500 records": {
+                "summsry": "whole test list",
+                "description": "A **links** list works correctly.",
+                "value": get_whole_list(),
             },
         },
     ),
+    sesson_service: AccountsParserService = Depends(get_sesson_service),
 ) -> Sesson:
-
-    return Sesson(session_id=42)
+    sesson = await sesson_service.data_process(links)
+    return sesson

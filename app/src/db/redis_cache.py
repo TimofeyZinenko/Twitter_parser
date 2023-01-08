@@ -1,17 +1,19 @@
 """Create redis db DI function."""
+import asyncio
 from functools import lru_cache
+from time import sleep
 from typing import Optional
 
 from db.abstract_cashe import AsyncCacheStorage
-from redis import asyncio
+from redis.asyncio import Redis
 
-redis_cache: Optional[asyncio.Redis] = None
+redis_cache: Optional[Redis] = None
 
 
 class RedisCacher(AsyncCacheStorage):
     """Implements interface to redis db."""
 
-    def __init__(self, rds: asyncio.Redis):
+    def __init__(self, rds: Redis):
         """Initialaze constructor redis db interface.
 
         Args:
@@ -36,7 +38,7 @@ class RedisCacher(AsyncCacheStorage):
         self,
         key,
         records_value,
-        expire,
+        expire=60 * 15,
         **kwargs,
     ):
         """Save records to db.
@@ -54,8 +56,11 @@ class RedisCacher(AsyncCacheStorage):
             **kwargs,
         )
 
+    async def isKeyExist(self, key_name):
+        return await self._redis.exists(key_name)
 
-async def get_redis() -> asyncio.Redis:
+
+async def get_redis() -> Redis:
     """Функция внедрении зависимостей.
 
     Returns:

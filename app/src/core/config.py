@@ -1,9 +1,11 @@
 """Config required settings."""
 
 
+from os import path
+
 from core.logger import LOGGING
 from dotenv import load_dotenv
-from pydantic import BaseSettings, Field, PostgresDsn, RedisDsn
+from pydantic import BaseSettings, Field, PostgresDsn, RedisDsn, dataclasses
 
 load_dotenv()
 
@@ -16,6 +18,7 @@ class Settings(BaseSettings):
     api_bearer_token: str = Field(..., env="API_BEARER_TOKEN")
     api_access_token: str = Field(..., env="API_ACCESS_TOKEN")
     api_access_token_secret: str = Field(..., env="API_ACCESS_TOKEN_SECRET")
+    base_dir = path.dirname(path.dirname(path.abspath(__file__)))
 
     project_name: str = Field(..., env="PROJECT_NAME")
     cache_expire_in_seconds = 60 * 5  # 5 минут
@@ -40,4 +43,11 @@ class Settings(BaseSettings):
         }
 
 
+@dataclasses.dataclass
+class Status:
+    one: str = "success"
+    zero: str = "failed"
+
+
 config_settings = Settings()
+status = Status()

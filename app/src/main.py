@@ -21,8 +21,12 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    pool = aioredis.ConnectionPool(config_settings.redis_dsn, db=0)
-    redis_cache.redis_cache = aioredis.Redis(connection_pool=pool)
+    pool = aioredis.ConnectionPool.from_url(
+        config_settings.redis_dsn, max_connections=20
+    )
+    redis_cache.redis_cache = aioredis.Redis(
+        connection_pool=pool, decode_responses=True
+    )
 
 
 @app.on_event("shutdown")
