@@ -7,6 +7,8 @@ from db import redis_cache
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from redis import asyncio as aioredis
+from redis.backoff import ExponentialBackoff
+from redis.retry import Retry
 
 logging_config.dictConfig(config_settings.logger_config)
 
@@ -24,8 +26,12 @@ async def startup():
     pool = aioredis.ConnectionPool.from_url(
         config_settings.redis_dsn, max_connections=20
     )
+    retry = Retry(ExponentialBackoff(), 6)
     redis_cache.redis_cache = aioredis.Redis(
-        connection_pool=pool, decode_responses=True
+        connection_pool=pool,
+        decode_responses=True,
+        retry=retry,
+        retry_on_timeout=True,
     )
 
 
