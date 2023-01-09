@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    hostname: redis_in_container
+    container_name: redis_db
+    restart: always
+    command:
+      - sh
+      - -c
+      - redis-server --appendonly yes --maxmemory 450000000 --maxmemory-policy volatile-lru
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 15s
+      timeout: 15s
+      retries: 5
+      start_period: 20s
+    profiles:
+      - redis_only
+      - dev
+    ports:
+      - "6380:6379"
+
+    networks:
+      - twitter_net
+
+  twitter_parser:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    restart: always
+    depends_on:
+      - redis
+    env_file:
+      - .prod.env
+    command: uvicorn main:app --workers 1 --host 0.0.0.0 --port 8000
+    profiles:
+      - dev
+    networks:
+      - default
+      - twitter_net
+    ports:
+      - 8000:8000
+
+networks:
+  twitter_net:
+    driver: bridge
