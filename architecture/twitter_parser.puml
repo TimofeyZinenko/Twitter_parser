@@ -1,0 +1,43 @@
+@startuml Twitter_Parser
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!define SPRITESURL https://raw.githubusercontent.com/plantuml-stdlib/gilbarbara-plantuml-sprites/v1.0/sprites
+!define osaPuml https://raw.githubusercontent.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons/master
+
+!include osaPuml/Common.puml
+!include osaPuml/User/all.puml
+
+!include <cloudinsight/redis>
+!include <cloudinsight/python>
+!include <cloudinsight/user>
+!include <cloudinsight/nginx>
+
+skinparam WrapWidth 250
+skinparam DefaultFontName Times New Romic
+skinparam DefaultFontSize 16
+skinparam ArrowFontSize 14
+skinparam DefaultTextAlignment center
+skinparam titleFontSize 25
+
+title Twitter Parser components
+
+HIDE_STEREOTYPE()
+
+SHOW_PERSON_SPRITE("osa_user_blue_sysadmin")
+Person_Ext(user, "User", "People that want to watch movies", $sprite="osa_user_green")
+
+Component_Ext(nginx, "Nginx", "nginx", $sprite=nginx)
+System_Ext(twttr_api, "Twitter API", $tags="fallback+v1.1")
+
+Container_Boundary(twitter, "Twitter Parser Service"){
+    Component(api, "API", "Fast API", $sprite=python)
+    ComponentDb(redis, "Cache", "redis", $sprite=redis)
+    Rel(api, redis, "store data and retrieve data from")
+    Rel_R(api, twttr_api, "retrieve data from")
+}
+
+Rel(user, nginx, "request")
+Rel(nginx, api, "request")
+
+
+@enduml
