@@ -4,8 +4,8 @@ from functools import lru_cache
 from time import sleep
 from typing import Optional
 
-from db.abstract_cashe import AsyncCacheStorage
 from redis.asyncio import Redis
+from src.db.abstract_cashe import AsyncCacheStorage
 
 redis_cache: Optional[Redis] = None
 

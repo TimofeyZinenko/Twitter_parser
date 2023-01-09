@@ -1,5 +1,5 @@
 import orjson
-from core.config import config_settings
+from src.core.config import config_settings
 
 
 def orjson_dumps(v, *, default):

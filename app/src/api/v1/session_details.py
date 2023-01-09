@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, dataclasses
-from services.sesson_details_service import (
+from src.services.sesson_details_service import (
     SessonDetailsServise,
     get_sesson_details_service,
 )

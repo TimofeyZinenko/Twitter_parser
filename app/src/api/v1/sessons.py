@@ -2,9 +2,9 @@ from http import HTTPStatus
 from typing import List
 
 from fastapi import APIRouter, Body, Depends, HTTPException
-from models.common import get_whole_list
 from pydantic import BaseModel, dataclasses
-from services.sessons_serviсe import AccountsParserService, get_sesson_service
+from src.models.common import get_whole_list
+from src.services.sessons_serviсe import AccountsParserService, get_sesson_service
 
 
 class Sesson(BaseModel):

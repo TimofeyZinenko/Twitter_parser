@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from services.tweets_service import TweetsService, get_tweets_service
+from src.services.tweets_service import TweetsService, get_tweets_service
 
 
 class TweetsInfo(BaseModel):

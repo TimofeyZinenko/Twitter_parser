@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, NoneStr
-from services.user_service import UserParcerService, get_user_parser_service
+from src.services.user_service import UserParcerService, get_user_parser_service
 
 
 class UserInfo(BaseModel):

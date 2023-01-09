@@ -2,11 +2,11 @@ import json
 from functools import lru_cache
 from typing import List
 
-from db.abstract_cashe import AsyncCacheStorage
-from db.redis_cache import get_redis_cacher
-from db.twitter_api import get_twitter_api
 from fastapi import Depends
-from models.tweets import Tweets
+from src.db.abstract_cashe import AsyncCacheStorage
+from src.db.redis_cache import get_redis_cacher
+from src.db.twitter_api import get_twitter_api
+from src.models.tweets import Tweets
 from tweepy import API
 
 

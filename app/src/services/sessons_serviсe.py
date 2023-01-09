@@ -5,13 +5,13 @@ from operator import getitem
 from typing import List
 
 import requests
-from core.config import config_settings, status
-from db.abstract_cashe import AsyncCacheStorage
-from db.redis_cache import get_redis_cacher
 from fastapi import Depends
-from models.sesson_models import SessonModel
-from models.users import UserParser
 from pydantic import BaseSettings
+from src.core.config import config_settings, status
+from src.db.abstract_cashe import AsyncCacheStorage
+from src.db.redis_cache import get_redis_cacher
+from src.models.sesson_models import SessonModel
+from src.models.users import UserParser
 
 
 class AccountsParserService:
@@ -55,7 +55,7 @@ class AccountsParserService:
         else:
             params = {"screen_name": to_lookup}
             data = requests.get(self.url, params=params, headers=self.headers)
-            # await asyncio.gather(say(data, 0.01))
+
             user_objs = [UserParser.parse_obj(user) for user in data.json()]
 
         return user_objs
@@ -68,10 +68,7 @@ class AccountsParserService:
     async def data_process(self, links: List[str]):
         screen_names, names_count = await self.get_usernames(links)
         screen_names = list(screen_names)
-
         usr_objs = await self.get_user_objs(screen_names)
-
-        await self.save_to_redis(usr_objs)
 
         existed = [name for name in screen_names if await self.cacher.isKeyExist(name)]
 

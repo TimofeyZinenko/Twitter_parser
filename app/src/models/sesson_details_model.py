@@ -1,8 +1,8 @@
 from typing import List
 
 import orjson
-from models.common import orjson_dumps
 from pydantic import BaseModel, dataclasses
+from src.models.common import orjson_dumps
 
 
 @dataclasses.dataclass

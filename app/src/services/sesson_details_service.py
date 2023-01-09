@@ -2,11 +2,11 @@ import json
 from functools import lru_cache
 from typing import List
 
-from db.abstract_cashe import AsyncCacheStorage
-from db.redis_cache import get_redis_cacher
 from fastapi import Depends
-from models.sesson_details_model import SessonDetails
 from pydantic import parse_obj_as
+from src.db.abstract_cashe import AsyncCacheStorage
+from src.db.redis_cache import get_redis_cacher
+from src.models.sesson_details_model import SessonDetails
 from tweepy import API
 
 

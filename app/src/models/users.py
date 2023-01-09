@@ -1,6 +1,6 @@
 import orjson
-from models.common import orjson_dumps
 from pydantic import BaseModel, Field, NoneStr
+from src.models.common import orjson_dumps
 
 
 class UserParser(BaseModel):

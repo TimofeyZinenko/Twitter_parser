@@ -1,8 +1,8 @@
 from functools import lru_cache
 
 import tweepy
-from core.config import config_settings
 from pydantic import BaseSettings
+from src.core.config import config_settings
 
 
 def twitter_api_auth(settings: BaseSettings):
